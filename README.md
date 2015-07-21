@@ -2,7 +2,7 @@ Blogging Friendly Markdown
 ===
 
 # Install:
----
+
 
 # Usage:
 ```JavaScript
@@ -35,7 +35,7 @@ type: `Object`
 Underlying `marked` module, you tweak it before conversion.  
 `gfm` options is always set to `true`
 
----
+
 
 # BFM Syntax
 Basically, **BFM** = [**GFM**](https://help.github.com/articles/github-flavored-markdown/) + **YAML MetaData**
@@ -48,10 +48,10 @@ Basically, **BFM** = [**GFM**](https://help.github.com/articles/github-flavored-
 MetaData is a YAML document, that can be parsed by `js-yaml`  
 
 if BFM is parsed by other markdown processor, `[](~ ~)` generally translates to an empty `<a>`
----
+
 
 # Note
 list of possible future features can be found in [PLAIING.md](./PLANNING.md)
----
+
 
 MIT License,
