@@ -51,7 +51,7 @@ if BFM is parsed by other markdown processor, `[](~ ~)` generally translates to 
 
 
 # Note
-list of possible future features can be found in [PLAIING.md](./PLANNING.md)
+list of possible future features can be found in [PLANNING.md](./PLANNING.md)
 
 
 MIT License,
