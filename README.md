@@ -39,7 +39,7 @@ Underlying `marked` module, you tweak it before conversion.
 
 # BFM Syntax
 Basically, **BFM** = [**GFM**](https://help.github.com/articles/github-flavored-markdown/) + **YAML MetaData**
-#### MetaData format:
+#### MetaData:
 ```
 [](~
     /* valid yaml document here */
@@ -47,15 +47,13 @@ Basically, **BFM** = [**GFM**](https://help.github.com/articles/github-flavored-
 ```
 MetaData is a YAML document, that can be parsed by `js-yaml`  
 
-if BFM is parsed by other markdown processor, `[](~ ~)` generally translates to an empty `<a>`
-
 
 
 # Syntax Highlight
-Syntax highlight is built-in, using `highlight.js`
+Syntax highlight is built-in, using `highlight.js`  
 Remember to include stylesheet in final document  
-  Try one at [highlight.js](https://highlightjs.org/)
-  CSS files can be found at [Github](https://github.com/isagalaev/highlight.js/tree/master/src/styles)
+  Try one at [highlight.js](https://highlightjs.org/)  
+  CSS files can be found at [Github](https://github.com/isagalaev/highlight.js/tree/master/src/styles)  
 
 
 
