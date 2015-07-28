@@ -4,6 +4,12 @@ var marked = require('marked')
 var yaml   = require('js-yaml')
 var hljs   = require('highlight.js')
 
+var mixinScope = /\[\]\(<([^]+)>\)/g
+
+function preserveMixin(markdown) {
+    return markdown.replace(mixinScope, '<!--BFM-MIXIN-- $1 -->')
+}
+
 var metaScope = /\[\]\(~([^]+)~\)/
 
 var bfm = function(markdown) {
@@ -25,6 +31,9 @@ var bfm = function(markdown) {
     }
     
     markdown = markdown.replace(metaScope, '')
+    
+    // preserve mixins
+    markdown = preserveMixin(markdown)
     
     // make sure marked is set to convert GFM
     marked.setOptions({

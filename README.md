@@ -40,14 +40,12 @@ Underlying `marked` module, you tweak it before conversion.
 # BFM Syntax
 Basically, **BFM** = [**GFM**](https://help.github.com/articles/github-flavored-markdown/) + **YAML MetaData**
 #### MetaData format:
-```
+```Markdown
 [](~
     /* valid yaml document here */
 ~)
 ```
 MetaData is a YAML document, that can be parsed by `js-yaml`  
-
-if BFM is parsed by other markdown processor, `[](~ ~)` generally translates to an empty `<a>`
 
 
 
@@ -58,6 +56,16 @@ Remember to include stylesheet in final document
   CSS files can be found at [Github](https://github.com/isagalaev/highlight.js/tree/master/src/styles)
 
 
+# HTML Tag Mixin
+Mix tag attributes into markdown element
+```Markdown
+[](< title="Tooltip" data-some="data" style="color: red">)
+A paragraph
+```
+renders to
+```HTML
+<p title="Tooltip" data-some="data" style="color: red">A paragraph</p>
+```
 
 # Note
 list of possible future features can be found in [PLANNING.md](./PLANNING.md)
