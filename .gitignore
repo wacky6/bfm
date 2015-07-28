@@ -1,3 +1,6 @@
+# Test Output
+test/*.html
+
 # Logs
 logs
 *.log

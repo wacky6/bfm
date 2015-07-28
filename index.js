@@ -2,6 +2,7 @@
 
 var marked = require('marked')
 var yaml   = require('js-yaml')
+var hljs   = require('highlight.js')
 
 var metaScope = /\[\]\(~([^]+)~\)/
 
@@ -12,15 +13,25 @@ var bfm = function(markdown) {
 
     // extract metadata string
     var metaStr = metaScope.exec(markdown)
-    var meta = metaStr
-               ? yaml.load(metaStr[1])   
+    
+    // parse metadata, if yaml.load throws, return null, indicating a failure
+    var meta
+    try {
+        meta = metaStr
+               ? yaml.load(metaStr[1]) 
                : {}
+    }catch(e) {
+        return null
+    }
     
     markdown = markdown.replace(metaScope, '')
     
     // make sure marked is set to convert GFM
     marked.setOptions({
-        gfm: true
+        gfm: true,
+        highlight: function(code) {
+            return hljs.highlightAuto(code).value
+        }
     })
     
     var html = marked(markdown)
