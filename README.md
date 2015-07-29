@@ -60,7 +60,7 @@ renders to
 
 
 # Syntax Highlight
-Syntax highlight is built-in, using `highlight.js`
+Syntax highlight is built-in, using `highlight.js`  
 Remember to include stylesheet in final document  
 Try one at [highlight.js](https://highlightjs.org/), [Source](https://github.com/isagalaev/highlight.js/tree/master/src/styles)
 
