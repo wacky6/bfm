@@ -2,7 +2,7 @@ Blogging Friendly Markdown
 ===
 
 # Install:
-npm install wacky6/bfm
+`npm install wacky6/bfm`
 
 # Usage:
 ```JavaScript
