@@ -1,16 +1,21 @@
 'use strict'
 
-var marked = require('marked')
-var yaml   = require('js-yaml')
-var hljs   = require('highlight.js')
+var marked   = require('marked')
+var yaml     = require('js-yaml')
+var hljs     = require('highlight.js')
+var beautify = require('js-beautify').html
 
-var mixinScope = /\[\]\(<([^]+)>\)/g
+var re_meta = /\[\]\(~([^]+)~\)/
+var re_mixin = /\[\]\(<([^]+?)>\)/g
+var re_mixinHtml = /<!--([^]+?)-->\s*?(<\w+(?:(?:\s+\w+(?:\s*=\s*(?:".*?"|'.*?'|[^'">\s]+))?)+\s*|\s*))(\/>|>)/g
 
 function preserveMixin(markdown) {
-    return markdown.replace(mixinScope, '<!--BFM-MIXIN-- $1 -->')
+    return markdown.replace(re_mixin, '<!-- $1 -->\n')
 }
 
-var metaScope = /\[\]\(~([^]+)~\)/
+function mixin(html) {
+    return html.replace(re_mixinHtml, '$2 $1 $3')
+}
 
 var bfm = function(markdown) {
 
@@ -18,7 +23,7 @@ var bfm = function(markdown) {
         throw new Error('markdown must be a string')
 
     // extract metadata string
-    var metaStr = metaScope.exec(markdown)
+    var metaStr = re_meta.exec(markdown)
     
     // parse metadata, if yaml.load throws, return null, indicating a failure
     var meta
@@ -30,7 +35,7 @@ var bfm = function(markdown) {
         return null
     }
     
-    markdown = markdown.replace(metaScope, '')
+    markdown = markdown.replace(re_meta, '')
     
     // preserve mixins
     markdown = preserveMixin(markdown)
@@ -44,6 +49,12 @@ var bfm = function(markdown) {
     })
     
     var html = marked(markdown)
+    
+    html = mixin(html) 
+    
+    html = beautify(html, {
+        indent_size: 2
+    })
     
     return {
         html: html,
