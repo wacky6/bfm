@@ -2,8 +2,8 @@ Blogging Friendly Markdown
 ===
 a Wacky but Flavorful Markdown
 
-** This project is subject to changes that BREAKS COMPATIBILITY **
-** For production, use with EXTREME CAUTION **
+This project is subject to changes that **BREAKS COMPATIBILITY**  
+For production, use with **EXTREME CAUTION**
 
 ## Install:
 `npm install wacky6/bfm`
@@ -43,7 +43,7 @@ Underlying `marked` module, tweak it before conversion.
 
 
 ## BFM Syntax
-**BFM** = [**GFM**](https://help.github.com/articles/github-flavored-markdown/) + **YAML(Meta)** + **Sugar** + **Mixin**
+BFM = [GFM](https://help.github.com/articles/github-flavored-markdown/) + YAML(Meta) + Sugar + Mixin
 
 #### Meta: a valid YAML document
 tab (`\t`) is NOT allowed
@@ -55,12 +55,12 @@ tab (`\t`) is NOT allowed
 ```
 
 
-#### `<span>` tag sugar
+#### `<span>` Tag Sugar
 `[text](<@color:red>)`  => <span style="color:red;">red text</span>
 
 
 
-#### Tag Mixin:
+#### Mixin:
 ```
 [](<
    .package                // -> class="package"
