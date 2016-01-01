@@ -1,6 +1,6 @@
 {
   "name": "bfm",
-  "version": "0.1.2",
+  "version": "0.3.0",
   "description": "Blogging Friendly Markdown",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   "dependencies": {
     "highlight.js": "^8.6.0",
     "js-beautify": "^1.5.10",
-    "js-yaml": "^3.3.1",
+    "js-yaml": "^3.4.6",
     "marked": "^0.3.3"
   }
 }

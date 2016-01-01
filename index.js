@@ -1,66 +1,45 @@
 'use strict'
 
-var marked   = require('marked')
-var yaml     = require('js-yaml')
-var hljs     = require('highlight.js')
-var beautify = require('js-beautify').html
+let meta      = require('./lib/meta')
+let mixin     = require('./lib/mixin')
+let bubbles   = require('./lib/bubbles')
+let span      = require('./lib/span')
+let marked    = require('marked')
+let hljs      = require('highlight.js')
+let beautify  = require('js-beautify').html
 
-var re_meta = /\[\]\(~([^]+)~\)/
-var re_mixin = /\[\]\(<([^]+?)>\)/g
-var re_mixinHtml = /<!--([^]+?)-->\s*?(<\w+(?:(?:\s+\w+(?:\s*=\s*(?:".*?"|'.*?'|[^'">\s]+))?)+\s*|\s*))(\/>|>)/g
+marked.setOptions({
+    gfm: true,
+    highlight: (code, lang) => hljs.highlightAuto(code, lang?[lang]:undefined).value
+})
 
-function preserveMixin(markdown) {
-    return markdown.replace(re_mixin, '<!-- $1 -->\n')
-}
-
-function mixin(html) {
-    return html.replace(re_mixinHtml, '$2 $1 $3')
-}
-
-var bfm = function(markdown) {
-
-    if (typeof markdown != 'string') 
+function bfm(markdown) {
+    if (typeof markdown != 'string')
         throw new Error('markdown must be a string')
 
-    // extract metadata string
-    var metaStr = re_meta.exec(markdown)
-    
-    // parse metadata, if yaml.load throws, return null, indicating a failure
-    var meta
-    try {
-        meta = metaStr
-               ? yaml.load(metaStr[1]) 
-               : {}
-    }catch(e) {
-        return null
-    }
-    
-    markdown = markdown.replace(re_meta, '')
-    
-    // preserve mixins
-    markdown = preserveMixin(markdown)
-    
-    // make sure marked is set to convert GFM
-    marked.setOptions({
-        gfm: true,
-        highlight: function(code) {
-            return hljs.highlightAuto(code).value
-        }
-    })
-    
-    var html = marked(markdown)
-    
-    html = mixin(html) 
-    
-    html = beautify(html, {
-        indent_size: 2
-    })
-    
-    return {
-        html: html,
-        meta: meta
-    }
+    marked.setOptions({gfm: true})
+
+    let html, res={}
+    // meta
+    res.meta = meta.parse(markdown)
+    markdown = meta.remove(markdown)
+
+    // prepare for marked conversion
+    markdown = span.process(markdown)
+    markdown = mixin.preserve(markdown)
+
+    // convert to HTML then mixin
+    html = marked(markdown)
+    html = mixin.process(html)
+
+    // extract bubbles
+    res.bubbles = bubbles.parse(html)
+    html = bubbles.remove(html)
+
+    res.html = beautify(html, { indent_size: 2 })
+
+    return res
 }
-bfm.marked = marked
 
 module.exports = bfm
+module.exports.marked = marked
