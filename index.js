@@ -1,45 +1,45 @@
 'use strict'
 
-let meta      = require('./lib/meta')
-let mixin     = require('./lib/mixin')
-let bubbles   = require('./lib/bubbles')
-let span      = require('./lib/span')
-let marked    = require('marked')
-let hljs      = require('highlight.js')
-let beautify  = require('js-beautify').html
+const meta     = require('./lib/meta')
+const mixin    = require('./lib/mixin')
+const bubbles  = require('./lib/bubbles')
+const span     = require('./lib/span')
+const pipes    = require('./lib/pipes')
+const marked   = require('marked')
+const hljs     = require('highlight.js')
+const beautify = require('js-beautify').html
 
 marked.setOptions({
-    gfm: true,
+    breaks:    true,
+    gfm:       true,
     highlight: (code, lang) => hljs.highlightAuto(code, lang?[lang]:undefined).value
 })
 
-function bfm(markdown) {
+function flavorMarked(markdown) {
     if (typeof markdown != 'string')
         throw new Error('markdown must be a string')
 
-    marked.setOptions({gfm: true, breaks: true})
+    let res = {
+        html:    null,
+        meta:    {},
+        bubbles: []
+    }
 
-    let html, res={}
-    // meta
-    res.meta = meta.parse(markdown)
-    markdown = meta.remove(markdown)
-
-    // prepare for marked conversion
-    markdown = span.process(markdown)
-    markdown = mixin.preserve(markdown)
-
-    // convert to HTML then mixin
-    html = marked(markdown)
-    html = mixin.process(html)
-
-    // extract bubbles
-    res.bubbles = bubbles.parse(html)
-    html = bubbles.remove(html)
-
-    res.html = beautify(html, { indent_size: 2 })
+    // pipe markdown through processors
+    pipes(markdown, [
+        meta.process,
+        bubbles.process,
+        span.process,        // span     => HTML <span>
+        mixin.preserve,      // mixin    => HTML comments
+        marked,              // markdown => HTML
+        mixin.process,
+        beautify,
+        (html) => res.html=html    // pass output to res
+    ], res)
 
     return res
 }
 
-module.exports = bfm
-module.exports.marked = marked
+module.exports         = (markdown) => flavorMarked(markdown).html
+module.exports.marked  = marked
+module.exports.process = flavorMarked

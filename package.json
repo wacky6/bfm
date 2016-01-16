@@ -1,24 +1,24 @@
 {
-  "name": "bfm",
-  "version": "0.3.0",
-  "description": "Blogging Friendly Markdown",
+  "name": "flavor-marked",
+  "version": "0.4.0",
+  "description": "wacky but Flavorful Markdown",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wacky6/bfm"
+    "url": "https://github.com/wacky6/flavor-marked"
   },
   "keywords": [
-    "markdown"
+    "markdown", "mixin", "html"
   ],
   "author": "wacky6",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wacky6/bfm/issues"
+    "url": "https://github.com/wacky6/flavor-marked/issues"
   },
-  "homepage": "https://github.com/wacky6/bfm",
+  "homepage": "https://github.com/wacky6/flavor-marked",
   "dependencies": {
     "highlight.js": "^8.6.0",
     "js-beautify": "^1.5.10",

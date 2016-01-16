@@ -1,95 +1,114 @@
-Blogging Friendly Markdown
+Flavor Marked
 ===
-a Wacky but Flavorful Markdown
-
-This project is subject to changes that **BREAKS COMPATIBILITY**  
-For production, use with **EXTREME CAUTION**
+wacky but Flavorful Markdown
 
 ## Install:
-`npm install wacky6/bfm`
+`npm install flavor-marked`
 
 
 ## Usage:
 ```JavaScript
-var bfm  = require('bfm')
-/* tweak  before conversion */
-bfm.marked.setOptions({ /* options */ })
+const flavorMarked = require('flavor-marked')
+flavorMarked.marked.setOptions({ /* options */ })    // tweak before conversion
 
-var result = bfm.bfm('# bfm')
-result.html   // output html
-result.meta   // metadata
-result.bubble // Array of elements should move to <head>
+flavorMarked('# Markdown')            // => string, html
+flavorMarked.process('# Markdown')    // => object, {meta, bubbles, html}
+
 ```
 
-#### bfm(markdown)
-##### markdown: `string`
+### flavorMarked(markdown)
+##### markdown
+Type: `string`
+Markdown string to be compiled
+##### return:
+Type: 'string'
+Compiled html
 
-returns following Object:
-
-```JavaScript
-{
-    html:    html,    // string, converted html
-    meta:    meta,    // Object, metadata in bfm
-    bubbles: ['<style></style>']  // Array, bubbles
-}
-```
-`throw` if something bad happened
+throws `Error` if something bad happens
 
 
-#### bfm.marked
-Underlying `marked` module, tweak it before conversion.  
-`gfm` is always set to `true`
+### flavorMarked.process(markdown)
+##### markdown
+Type: `string`
+Markdown string to be compiled
+##### return:
+Type: 'object', contains three fields:
+* html: `string`, compiled html
+* meta: `object`, embedded meta-data
+* bubbles: `Array`, bubbles that should be put in <head>
+
+throws `Error` if something bad happens
+
+### flavorMarked.marked
+Underlying `marked` module, you can tweak it before conversion
 
 
 
-## BFM Syntax
-BFM = [GFM](https://help.github.com/articles/github-flavored-markdown/) + YAML(Meta) + Sugar + Mixin
 
-#### Meta: a valid YAML document
-tab (`\t`) is NOT allowed
+## flavor-marked Syntax
+Flavorful Markdown = GFM + Meta-data + Mixin/Sugar + Bubbles
 
+#### GFM
+See [Github Flavored Markdown](https://help.github.com/articles/github-flavored-markdown/)
+
+#### Meta-data: valid YAML document
+tab(`\t`) is not allowed
 ```
 [](~
-    /* valid yaml document, except `tab` */
+    author: wacky6,
+    date:   2016-01-01
+    ...
 ~)
 ```
 
+#### Mixin/Sugar
+##### `<span>` Tag sugar
+`[text](<@color:red>)`  => `<span style="color:red;">red text</span>`
 
-#### `<span>` Tag Sugar
-`[text](<@color:red>)`  => <span style="color:red;">red text</span>
-
-
-
-#### Mixin:
+##### Mixin
+Mix html attributes into converted markdown, you can use mixins for both block and inline tags.
 ```
 [](<
    .package                // -> class="package"
-   #BFM                    // -> id="bfm"
-   @color: red             // -> style="color:red;"
-   @transition: color 1s   // -> style="transiton:color 1s; -webkit-transition: color 1s;"
-   $text: 'bfm'            // -> data-text="bfm"
+   #flavor-markdown        // -> id="flavor-markdown"
+   @opacity: .1            // -> style="opacity: .1;"
+   $text: 'flavors'        // -> data-text="flavors"
    ^as-is: as-is           // -> as-is="as-is"
->)**BFM**
+>)Too many flavors!
 ```
-Internally, recognizes mixins using `\s+(?=[.#@$^])` (space followed by special chars)
-don't write `.1s` in style mixin, write `0.1s`, or bad thing happens
+
+Internally, recognizes mixins using `/\s+(?=\.[-_A-Za-z])|\s+(?=[#@$^])/g` (space followed by special chars)  
+Numeric expression like `.1s` is properly handled. 
 
 Three mixin styles are encouraged, choose whichever comforts your eyes:
+```
+/* Compact, single space, no space in attr */
+[](< .class #id @color:red >)
 
-* Compact (single space) : `[](< .class #id @color:red >)`
-* Relaxed (triple spaces): `[](< .class   #id   @color: red >)`
-* Object (Multiline): as shown above
+/* Relaxed, triple spaces, space in attr */
+[](< .class   #id   @color: red >)
+
+/* Object, multiple lines, as shown above */
+```
 
 
 #### Bubble
-You can embed `<style>`, `<link>` in markdown, they will present in `bubbles` Array. Intended for further blog rendering.
+When embedding `<style>`, `<link>` in markdown, they will presend in `bubbles` Array.  
+Intended for further processing.
 
 
 
 ## Syntax Highlight
-Syntax highlight is built-in, using `highlight.js`  
-Remember to include stylesheet in final document  
-Try one at [highlight.js](https://highlightjs.org/), [Source](https://github.com/isagalaev/highlight.js/tree/master/src/styles)
+[highlight.js](https://highlightjs.org/) is built-in
+Remember to include their stylesheet: [highlight.js stylesheets](https://github.com/isagalaev/highlight.js/tree/master/src/styles)
+
+
+## How it works
+flavor-marked is NOT written as a formal parser. It simply uses `RegExp`s to transform texts. So, in theory, there should be some edge-cases when flavor-marked produces incorrect documents. If you encountered one in practise, please open an issue.
+
+Internally, converts mixins to HTML comments `<!-- -->`, they are preserved by `marked` during conversion. After conversion, transform these comments to the following html tag's attributes.
+
+If you have any cool ideas about mixins, feel free to implement and PR them.
 
 
 

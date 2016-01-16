@@ -1,18 +1,19 @@
 'use strict'
 
-var bfm  = require('./index')
-var fs   = require('fs')
-var basename = require('path').basename
-var extname  = require('path').extname
+const flavorMarked  = require('./index')
+const fs            = require('fs')
+const basename      = require('path').basename
+const extname       = require('path').extname
 
-var ls  = fs.readdirSync('./test')
+let ls  = fs.readdirSync('./test')
 
-ls.filter(function(f){
-    return extname(f)=='.md'
-}).forEach(function(f){
-    var _ = bfm(fs.readFileSync('test/'+f, 'utf-8'))
-    var meta = _.meta
-    var html = _.html
+ls.filter( 
+    (f) => extname(f)=='.md'
+).forEach( (f) => {
+    let _ = flavorMarked.process(fs.readFileSync('test/'+f, 'utf-8'))
+    let meta = _.meta
+    let html = _.html
+    let bubbles = _.bubbles
     fs.writeFileSync('test/'+f+'.html',
         `
         <!DOCTYPE html>
@@ -26,6 +27,8 @@ ls.filter(function(f){
         </article>
         <h4>HTML Code:</h4>
         <xmp>${html}</xmp>
+        <h4>Bubbles:</h4>
+        <xmp>${bubbles.join('\n\r')}</xmp>
         </body>
         </html>
         `
