@@ -21,7 +21,7 @@ flavorMarked.process('# Markdown')    // => object, {meta, bubbles, html}
 Type: `string`
 Markdown string to be compiled
 ##### return:
-Type: 'string'
+Type: `string`
 Compiled html
 
 throws `Error` if something bad happens
@@ -32,7 +32,7 @@ throws `Error` if something bad happens
 Type: `string`
 Markdown string to be compiled
 ##### return:
-Type: 'object', contains three fields:
+Type: `object`, contains three fields:
 * html: `string`, compiled html
 * meta: `object`, embedded meta-data
 * bubbles: `Array`, bubbles that should be put in <head>
@@ -40,7 +40,9 @@ Type: 'object', contains three fields:
 throws `Error` if something bad happens
 
 ### flavorMarked.marked
-Underlying `marked` module, you can tweak it before conversion
+Underlying `marked` module, tweak it before conversion
+
+Default: `{gfm: true, breaks: true}`
 
 
 
@@ -99,7 +101,7 @@ Intended for further processing.
 
 
 ## Syntax Highlight
-[highlight.js](https://highlightjs.org/) is built-in
+[highlight.js](https://highlightjs.org/) is built-in  
 Remember to include their stylesheet: [highlight.js stylesheets](https://github.com/isagalaev/highlight.js/tree/master/src/styles)
 
 
