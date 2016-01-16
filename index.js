@@ -17,7 +17,7 @@ function bfm(markdown) {
     if (typeof markdown != 'string')
         throw new Error('markdown must be a string')
 
-    marked.setOptions({gfm: true})
+    marked.setOptions({gfm: true, breaks: true})
 
     let html, res={}
     // meta
